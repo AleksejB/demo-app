@@ -72,9 +72,19 @@ dependencies {
 
     //???
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-beta01"
-
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     //SQLDelight driver
     implementation "com.squareup.sqldelight:android-driver:1.5.3"
+    implementation "com.squareup.sqldelight:coroutines-extensions-jvm:1.5.2"
+
+    //Coroutines
+//    implementation "org.jetbrains.kotlinx.kotlinx-coroutines-core:1.5.2"
+//    implementation "org.jetbrains.kotlinx.kotlinx-coroutines-android:1.5.2"
+}
+
+sqldelight {
+    UserDatabase {
+        packageName = "com.example.demoappv1"
+    }
 }

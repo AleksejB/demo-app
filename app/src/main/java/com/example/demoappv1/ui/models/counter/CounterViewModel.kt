@@ -17,6 +17,7 @@ class CounterViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ): MVIViewModel<CounterState, CounterEvent, CounterEffect>() {
 
+    //all od this is going to be changed to use CurrentUserSingleton and db
     val name = savedStateHandle.get<String>("name")
     private val _state = MutableStateFlow(CounterState(
         name = name ?: CounterState.DefaultName,

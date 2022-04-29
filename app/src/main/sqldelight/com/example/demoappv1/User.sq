@@ -1,0 +1,18 @@
+CREATE TABLE user (
+    user_name TEXT NOT NULL PRIMARY KEY,
+    count INTEGER AS Int NOT NULL DEFAULT 0
+);
+
+getUserByUsername:
+SELECT * FROM user WHERE user_name = :userName;
+
+updateUserCountByUsername:
+UPDATE user
+SET count = :newCount
+WHERE user_name = :userName;
+
+insertNewUser:
+INSERT OR IGNORE INTO user VALUES(:userName, :count);
+
+-- selectChanges:
+-- SELECT changes();
