@@ -1,0 +1,4 @@
+CREATE TABLE counter (
+    user_name TEXT NOT NULL,
+    count INT NOT NULL
+);
