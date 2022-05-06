@@ -4,9 +4,11 @@ import com.example.demoappv1.User
 import kotlinx.coroutines.flow.Flow
 
 
-interface CounterRepository {
+interface UserRepository {
 
-    fun getUserByUserName(userName: String): Flow<User?>
+    fun getUserByUserNameAsFlow(userName: String): Flow<User?>
+
+    suspend fun getUserByUsername(userName: String): User?
 
     suspend fun updateUserCountByUsername(newCount: Int, userName: String)
 

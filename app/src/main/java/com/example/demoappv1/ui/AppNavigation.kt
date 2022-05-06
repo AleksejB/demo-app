@@ -21,7 +21,7 @@ sealed class Screen(val route: String) {
     ) = "${graph.route}/$route/${args.joinToString("/")}"
 
     object Auth: Screen("auth")
-    object Counter: Screen("counter/{name}") //declare where the argument is meant to go to
+    object Counter: Screen("counter") //declare where the argument is meant to go to
     object BigNumber: Screen("counter/big_number")
     object Stats: Screen("stats")
 }

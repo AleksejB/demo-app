@@ -1,28 +1,32 @@
 package com.example.demoappv1.ui.models.counter
 
 import androidx.lifecycle.SavedStateHandle
-import com.example.demoappv1.repository.CounterRepository
+import androidx.lifecycle.viewModelScope
+import com.example.demoappv1.User
+import com.example.demoappv1.application.CurrentUser
+import com.example.demoappv1.repository.UserRepository
 import com.example.demoappv1.ui.models.MVIViewModel
-import dagger.hilt.InstallIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @HiltViewModel
 class CounterViewModel @Inject constructor(
-    private val repo: CounterRepository,
-    savedStateHandle: SavedStateHandle
+    private val repo: UserRepository
 ): MVIViewModel<CounterState, CounterEvent, CounterEffect>() {
 
-    //all od this is going to be changed to use CurrentUserSingleton and db
-    val name = savedStateHandle.get<String>("name")
-    private val _state = MutableStateFlow(CounterState(
-        name = name ?: CounterState.DefaultName,
-        number = 0 //retrieve user associated number from db
-    ))
+    private val initalState = CounterState("USER", 0)
+    private val _state: StateFlow<CounterState> = repo.getUserByUserNameAsFlow(CurrentUser.userName).map { user ->
+        if (user == null) {
+            repo.insertNewUser(CurrentUser.userName)
+            CounterState("UserName", 0) //this is janky, change this
+        } else {
+            CounterState(user.user_name, user.count)
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, initalState)
     override val state: StateFlow<CounterState> = _state
 
 
@@ -34,16 +38,23 @@ class CounterViewModel @Inject constructor(
                 postEffect(CounterEffect.NavigateToBigNumber)
             }
             is CounterEvent.IncrementPressed -> {
-                _state.value = state.value.copy(
-                    number = state.value.number + 1
-                )
+                incrementCountInDB()
             }
             is CounterEvent.DecrementPressed -> {
-                _state.value = state.value.copy(
-                    number = state.value.number - 1
-                )
+                decrementCountInDB()
             }
         }
     }
 
+    private fun incrementCountInDB() {
+        viewModelScope.launch {
+            repo.updateUserCountByUsername(_state.value.number + 1, CurrentUser.userName)
+        }
+    }
+
+    private fun decrementCountInDB() {
+        viewModelScope.launch {
+            repo.updateUserCountByUsername(_state.value.number - 1, CurrentUser.userName)
+        }
+    }
 }

@@ -18,7 +18,7 @@ fun NavGraphBuilder.addCounterScreen(
 ) {
     composable(
 //        Screen.Counter.createRoute(graph)
-        "dashboard/counter/{name}"
+        "dashboard/counter"
     ) {
         CounterScreen(
             navigateToBigNumberScreen = { number ->

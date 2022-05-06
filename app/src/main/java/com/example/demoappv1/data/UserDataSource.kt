@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserDataSource {
 
-    fun getUserByUsername(userName: String): Flow<User?>
+    fun getUserByUsernameAsFlow(userName: String): Flow<User?>
+
+    suspend fun getUserByUsername(userName: String): User?
 
     suspend fun updateUserCountByUsername(newCount: Int, userName: String)
 

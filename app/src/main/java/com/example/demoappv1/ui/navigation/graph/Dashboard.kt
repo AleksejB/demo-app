@@ -15,8 +15,10 @@ fun NavGraphBuilder.addDashboardGraph(
     navController: NavController
 ) {
     navigation(
-        route = Graph.Dashboard.route,
-        startDestination = Screen.Counter.createRoute(Graph.Dashboard)
+//        route = Graph.Dashboard.route,
+        route = "dashboard",
+//        startDestination = Screen.Counter.createRoute(Graph.Dashboard)
+        startDestination = "dashboard/counter"
     ) {
         addCounterScreen(navController, Graph.Dashboard)
         addBigNumberScreen()

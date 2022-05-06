@@ -5,8 +5,7 @@ data class CounterState(
     val number: Int
 ) {
     companion object {
-        val DefaultName = "YourName"
-        //for Preview
+        //for @Preview
         val Default = CounterState("YourName", 0)
     }
 }

@@ -1,12 +1,11 @@
 package com.example.demoappv1.di
 
 import android.app.Application
-import android.service.autofill.UserData
 import com.example.demoappv1.UserDatabase
 import com.example.demoappv1.data.UserDataSource
 import com.example.demoappv1.data.UserDataSourceImpl
-import com.example.demoappv1.repository.CounterRepository
-import com.example.demoappv1.repository.CounterRepositoryImpl
+import com.example.demoappv1.repository.UserRepository
+import com.example.demoappv1.repository.UserRepositoryImpl
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Module
@@ -21,8 +20,8 @@ object AppModule { //naming of this, need clarification
 
     @Provides
     @Singleton
-    fun provideCounterRepository(userDataSource: UserDataSource): CounterRepository {
-        return CounterRepositoryImpl(userDataSource)
+    fun provideCounterRepository(userDataSource: UserDataSource): UserRepository {
+        return UserRepositoryImpl(userDataSource)
     }
 
     @Provides

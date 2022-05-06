@@ -1,7 +1,6 @@
 package com.example.demoappv1.ui.models.auth
 
-import com.example.demoappv1.repository.CounterRepository
-import com.example.demoappv1.repository.CounterRepositoryImpl
+import com.example.demoappv1.repository.UserRepository
 import com.example.demoappv1.ui.models.MVIViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val repo: CounterRepository
+    private val repo: UserRepository
 ): MVIViewModel<AuthState, AuthEvent, AuthEffect>() {
 
     private val _state = MutableStateFlow(AuthState.Default)

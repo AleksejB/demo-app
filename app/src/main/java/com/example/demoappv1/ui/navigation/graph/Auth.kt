@@ -13,8 +13,10 @@ fun NavGraphBuilder.addAuthGraph(
     navController: NavController
 ) {
     navigation(
-        route = Graph.Auth.route,
-        startDestination = Screen.Auth.createRoute(Graph.Auth)
+//        route = Graph.Auth.route,
+        route = "auth",
+//        startDestination = Screen.Auth.createRoute(Graph.Auth)
+        startDestination = "auth/auth"
     ) {
         addAuthScreen(navController, Graph.Auth)
     }

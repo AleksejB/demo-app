@@ -63,7 +63,9 @@ private fun CounterScreen(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = state.name)
+        Text(
+            text = state.name
+        )
         Text(
             text = state.number.toString(),
             modifier = Modifier.clickable(enabled = true) {
