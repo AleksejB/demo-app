@@ -14,11 +14,6 @@ import com.example.demoappv1.ui.AppNavigation
 @ExperimentalMaterialApi
 @Composable
 fun MainApplication() {
-
-//    DemoAppV1Theme {
-//
-//
-//    }
     val navController = rememberNavController()
 
     DemoAppV1Theme() {
