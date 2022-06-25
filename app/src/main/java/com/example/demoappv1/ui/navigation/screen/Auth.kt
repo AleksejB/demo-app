@@ -3,13 +3,10 @@ package com.example.demoappv1.ui.navigation.screen
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.example.demoappv1.application.CurrentUser
+import com.example.domain.CurrentUser
 import com.example.demoappv1.ui.Graph
-import com.example.demoappv1.ui.Screen
-import com.example.demoappv1.ui.navigation.screenui.AuthScreen
+import com.example.ui_auth.AuthScreen
 
 @ExperimentalComposeUiApi
 fun NavGraphBuilder.addAuthScreen(
@@ -19,9 +16,10 @@ fun NavGraphBuilder.addAuthScreen(
     composable(
         route = "auth/auth",
     ) {
+
         AuthScreen(
             navigateToDashboard = { name ->
-                CurrentUser.userName = name
+                com.example.domain.CurrentUser.userName = name
                 navController.navigate("dashboard/counter")
             }
         )

@@ -14,3 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "DemoAppV1"
 include ':app'
+include ':data'
+include ':ui-auth'
+include ':base-ui'
+include ':ui-counter'
+include ':domain'
