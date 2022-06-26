@@ -1,5 +1,5 @@
 package com.example.ui_counter.counter
 
 sealed interface CounterEffect {
-    object NavigateToBigNumber: CounterEffect
+    data class NavigateToStats(val userId: String): CounterEffect
 }

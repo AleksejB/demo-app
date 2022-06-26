@@ -1,8 +1,10 @@
 package com.example.ui_counter.counter
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.userrepository.UserRepository
 import com.example.base_ui.viewmodel.MVIViewModel
+import com.example.data.repository.counterrepository.CounterRepository
 import com.example.domain.CurrentUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -11,27 +13,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CounterViewModel @Inject constructor(
-    private val repo: UserRepository
+    private val counterRepository: CounterRepository,
+    savedStateHandle: SavedStateHandle
 ): MVIViewModel<CounterState, CounterEvent, CounterEffect>() {
 
-    private val initialState = CounterState("USER", 0)
-    private val _state: StateFlow<CounterState> = repo.getUserByUserNameAsFlow(CurrentUser.userName).map { user ->
-        if (user == null) {
-            repo.insertNewUser(CurrentUser.userName)
-            CounterState("UserName", 0) //this is janky, change this
+    private val userId = savedStateHandle.get<String>("userId")!!
+
+    private val initialState = CounterState.Default
+    private val _state: StateFlow<CounterState> = counterRepository.getCount(userId).map { count ->
+        if (count != null) {
+            CounterState(count = count)
         } else {
-            CounterState(user.user_name, user.count)
+            CounterState(count = -999)
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, initialState)
     override val state: StateFlow<CounterState> = _state
 
-
-
-
     override fun handleEvent(event: CounterEvent) {
         when (event) {
             is CounterEvent.NumberPressed -> {
-                postEffect(CounterEffect.NavigateToBigNumber)
+                postEffect(CounterEffect.NavigateToStats(userId))
             }
             is CounterEvent.IncrementPressed -> {
                 incrementCountInDB()
@@ -44,13 +45,19 @@ class CounterViewModel @Inject constructor(
 
     private fun incrementCountInDB() {
         viewModelScope.launch {
-            repo.updateUserCountByUsername(_state.value.number + 1, CurrentUser.userName)
+            counterRepository.updateCount(
+                userId = userId,
+                newCount = state.value.count + 1
+            )
         }
     }
 
     private fun decrementCountInDB() {
         viewModelScope.launch {
-            repo.updateUserCountByUsername(_state.value.number - 1, CurrentUser.userName)
+            counterRepository.updateCount(
+                userId = userId,
+                newCount = state.value.count
+            )
         }
     }
 }

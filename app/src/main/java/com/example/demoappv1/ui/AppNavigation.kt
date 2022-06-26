@@ -15,13 +15,10 @@ sealed class Graph(val route: String) {
 
 sealed class Screen(val route: String) {
 
-    fun createRoute(
-        graph: Graph,
-        vararg args: String
-    ) = "${graph.route}/$route/${args.joinToString("/")}"
+    fun createRoute(graph: Graph) = "${graph.route}/$route"
 
     object Auth: Screen("auth")
-    object Counter: Screen("counter") //declare where the argument is meant to go to
+    object Counter: Screen("counter/{userId}")
     object BigNumber: Screen("counter/big_number")
     object Stats: Screen("stats")
 }

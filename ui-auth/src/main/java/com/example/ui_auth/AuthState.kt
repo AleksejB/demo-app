@@ -1,9 +1,13 @@
 package com.example.ui_auth
 
 data class AuthState(
-    val name: String
+    val firstName: String,
+    val lastName: String
 ) {
     companion object {
-        val Default = AuthState("")
+        val Default = AuthState(
+            firstName = "",
+            lastName = ""
+        )
     }
 }

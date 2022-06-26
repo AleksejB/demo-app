@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun AuthScreen(
     navigateToDashboard: (name: String) -> Unit
 ) {
-
     val viewModel = hiltViewModel<AuthViewModel>()
     val state by viewModel.state.collectAsState()
     
@@ -30,7 +29,7 @@ fun AuthScreen(
         viewModel.effects.collect { effect ->
             when (effect) {
                 is AuthEffect.NavigateToDashboard -> {
-                    navigateToDashboard(effect.name)
+                    navigateToDashboard(effect.userId)
                 }
             }
         }
@@ -40,8 +39,6 @@ fun AuthScreen(
         state = state,
         eventHandler = viewModel::postEvent
     )
-
-
 }
 
 @Composable
@@ -58,9 +55,15 @@ private fun AuthScreen(
     ) {
 
         TextField(
-            value = state.name,
-            onValueChange = { eventHandler(AuthEvent.NameChanged(it)) },
-            label = { Text(text = "Enter your name") }
+            value = state.firstName,
+            onValueChange = { eventHandler(AuthEvent.FirstNameChanged(it)) },
+            label = { Text(text = "Enter your first name") }
+        )
+
+        TextField(
+            value = state.lastName,
+            onValueChange = { eventHandler(AuthEvent.LastNameChanged(it)) },
+            label = { Text(text = "Enter your last name") }
         )
 
         Button(

@@ -1,0 +1,17 @@
+CREATE TABLE counter (
+    user_uuid TEXT NOT NULL PRIMARY KEY,
+    count INTEGER AS Int NOT NULL DEFAULT 0,
+    FOREIGN KEY (user_uuid) REFERENCES user(user_uuid)
+);
+
+getUserCount:
+SELECT count FROM counter WHERE user_uuid = :userId;
+
+updateUserCountByUserId:
+UPDATE counter
+SET count = :newCount
+WHERE user_uuid = :userId;
+
+insertNewCount:
+INSERT OR IGNORE INTO counter
+VALUES (:userId, :count);

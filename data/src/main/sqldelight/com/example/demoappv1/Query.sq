@@ -1,5 +1,5 @@
 
-getUserLastNameAndCount:
+getUserAndCount:
 SELECT user_first_name, user_last_name, count
-FROM user_name_table
-JOIN user_counter_table ON user_name_table.user_id = user_counter_table.user_id
+FROM user
+JOIN counter ON user.user_uuid = counter.user_uuid;

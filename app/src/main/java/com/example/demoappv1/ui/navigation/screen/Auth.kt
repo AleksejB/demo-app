@@ -18,9 +18,8 @@ fun NavGraphBuilder.addAuthScreen(
     ) {
 
         AuthScreen(
-            navigateToDashboard = { name ->
-                com.example.domain.CurrentUser.userName = name
-                navController.navigate("dashboard/counter")
+            navigateToDashboard = { userId ->
+                navController.navigate("dashboard/counter/$userId")
             }
         )
     }

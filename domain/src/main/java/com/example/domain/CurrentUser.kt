@@ -2,13 +2,17 @@ package com.example.domain
 
 object CurrentUser {
 
-    var userName: String = "??????"
-    var count: Int = 0
-    var exists: Boolean = false //not used yet. Was planning to use it for refactoring of how
-    //CounterState works.
+    lateinit var currentUser: CurrentUser
+    private set
 
-    data class User(
-        val name: String,
+    fun setCurrentUser(newCurrentUser: CurrentUser) {
+        currentUser = newCurrentUser
+    }
+
+    data class CurrentUser(
+        val userUuid: String,
+        val firstName: String,
+        val lastName: String,
         val count: Int
     )
 }

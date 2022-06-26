@@ -1,6 +1,5 @@
 package com.example.data.datasource.userdatasource
 
-import com.example.data.datasource.userdatasource.UserDataSource
 import com.example.demoappv1.User
 import com.example.demoappv1.UserDatabase
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -14,19 +13,30 @@ internal class UserDataSourceImpl @Inject constructor(
 
     private val queries = db.userQueries
 
-    override fun getUserByUsernameAsFlow(userName: String): Flow<User?> {
-        return queries.getUserByUsername(userName).asFlow().mapToOneOrNull()
+//    override suspend fun getUserById(userId: String): User? {
+//        return queries.getUserById(userId).executeAsOneOrNull()
+//    }
+
+    override suspend fun getUserByFirstAndLastName(firstName: String, lastName: String): User? {
+        return queries.getUserByFirstAndLastName(
+            userFirstName = firstName,
+            userLastName = lastName
+        ).executeAsOneOrNull()
     }
 
-    override suspend fun getUserByUsername(userName: String): User? {
-        return queries.getUserByUsername(userName).executeAsOneOrNull()
+    override suspend fun updateUser(userId: String, firstName: String, lastName: String) {
+        return queries.updateUser(
+            userId = userId,
+            userFirstName = firstName,
+            userLastName = lastName
+        )
     }
 
-    override suspend fun updateUserCountByUsername(newCount: Int, userName: String) {
-        return queries.updateUserCountByUsername(newCount, userName)
-    }
-
-    override suspend fun insertNewUser(userName: String, count: Int) {
-        return queries.insertNewUser(userName, count)
+    override suspend fun insertNewUser(userId: String, firstName: String, lastName: String) {
+        return queries.insertUser(
+            userId = userId,
+            userFirstName = firstName,
+            userLastName = lastName
+        )
     }
 }

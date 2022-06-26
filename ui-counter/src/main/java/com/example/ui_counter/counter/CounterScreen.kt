@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun CounterScreen(
-    navigateToBigNumberScreen: (number: Int) -> Unit
+    navigateToStatsScreen: (userId: String) -> Unit
 ) {
 
     val viewModel = hiltViewModel<CounterViewModel>()
@@ -32,8 +32,8 @@ fun CounterScreen(
     LaunchedEffect(key1 = viewModel.effects) {
         viewModel.effects.collect { effect ->
             when (effect) {
-                is CounterEffect.NavigateToBigNumber -> {
-                    navigateToBigNumberScreen(viewModel.state.value.number)
+                is CounterEffect.NavigateToStats -> {
+                    navigateToStatsScreen(effect.userId)
                 }
             }
         }
@@ -58,10 +58,7 @@ private fun CounterScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = state.name
-        )
-        Text(
-            text = state.number.toString(),
+            text = state.count.toString(),
             modifier = Modifier.clickable(enabled = true) {
                 eventHandler(CounterEvent.NumberPressed)
             }

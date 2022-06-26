@@ -1,0 +1,24 @@
+CREATE TABLE user (
+    user_uuid TEXT NOT NULL PRIMARY KEY,
+    user_last_name TEXT NOT NULL,
+    user_first_name TEXT NOT NULL
+);
+
+insertUser:
+INSERT OR IGNORE INTO user VALUES(:userId, :userLastName, :userFirstName);
+
+updateUser:
+UPDATE user
+SET user_last_name = :userLastName,
+user_first_name = :userFirstName
+WHERE user_uuid = :userId;
+
+-- getUserIdByFirstAndLastName:
+-- SELECT user_uuid FROM user
+-- WHERE user_first_name == :userFirstName AND user_last_name == :userLastName;
+
+getUserByFirstAndLastName:
+SELECT * FROM user
+WHERE user_first_name == :userFirstName AND user_last_name == :userLastName;
+
+
