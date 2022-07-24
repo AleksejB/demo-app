@@ -1,24 +1,24 @@
 package com.example.data.di
 
-import android.app.Application
-import com.example.data.datasource.counterdatasource.CounterDataSource
-import com.example.data.datasource.counterdatasource.CounterDataSourceImpl
-import com.example.data.datasource.usercounterdatasource.UserCounterDataSource
-import com.example.data.datasource.usercounterdatasource.UserCounterDataSourceImpl
-import com.example.data.datasource.userdatasource.UserDataSource
-import com.example.data.datasource.userdatasource.UserDataSourceImpl
-import com.example.data.repository.counterrepository.CounterRepository
-import com.example.data.repository.counterrepository.CounterRepositoryImpl
-import com.example.data.repository.usercounterrepository.UserCounterRepository
-import com.example.data.repository.usercounterrepository.UserCounterRepositoryImpl
-import com.example.data.repository.userrepository.UserRepository
-import com.example.data.repository.userrepository.UserRepositoryImpl
-import com.example.demoappv1.UserDatabase
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.db.SqlDriver
+import android.content.Context
+import androidx.room.Room
+import com.example.data.DemoAppDatabase
+import com.example.data.daos.CounterDao
+import com.example.data.daos.UserCounterDao
+import com.example.data.daos.UserDao
+import com.example.domain.datasource.CounterDataSource
+import com.example.domain.datasource.UserDataSource
+import com.example.domain.repository.CounterRepository
+import com.example.data.repository.CounterRepositoryImpl
+import com.example.data.repository.UserCounterRepositoryImpl
+import com.example.domain.repository.UserRepository
+import com.example.data.repository.UserRepositoryImpl
+import com.example.domain.datasource.UserCounterDataSource
+import com.example.domain.repository.UserCounterRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -46,29 +46,29 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideUserDataSource(sqlDriver: SqlDriver): UserDataSource {
-        return UserDataSourceImpl(UserDatabase(sqlDriver))
+    fun provideUserCounterDao(demoAppDatabase: DemoAppDatabase): UserCounterDao {
+        return demoAppDatabase.getUserCounterDao()
     }
 
     @Provides
     @Singleton
-    fun provideCounterDataSource(sqlDriver: SqlDriver): CounterDataSource {
-        return CounterDataSourceImpl(UserDatabase(sqlDriver))
+    fun provideUserDao(demoAppDatabase: DemoAppDatabase): UserDao {
+        return demoAppDatabase.getUserDao()
     }
 
     @Provides
     @Singleton
-    fun provideUserCounterDataSource(sqlDriver: SqlDriver): UserCounterDataSource {
-        return UserCounterDataSourceImpl(UserDatabase(sqlDriver))
+    fun provideCounterDao(demoAppDatabase: DemoAppDatabase): CounterDao {
+        return demoAppDatabase.getCounterDao()
     }
 
     @Provides
     @Singleton
-    fun provideSqlDriver(app: Application): SqlDriver {
-        return AndroidSqliteDriver(
-            schema = UserDatabase.Schema,
-            context = app,
-            name = "user.db"
-        )
+    fun provideDemoAppDatabase(@ApplicationContext context: Context): DemoAppDatabase {
+        return Room.databaseBuilder(
+            context,
+            DemoAppDatabase::class.java,
+            "demoApp.db"
+        ).build()
     }
 }

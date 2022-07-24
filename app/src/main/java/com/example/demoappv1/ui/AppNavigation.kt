@@ -18,8 +18,7 @@ sealed class Screen(val route: String) {
     fun createRoute(graph: Graph) = "${graph.route}/$route"
 
     object Auth: Screen("auth")
-    object Counter: Screen("counter/{userId}")
-    object BigNumber: Screen("counter/big_number")
+    object Counter: Screen("counter/{email}")
     object Stats: Screen("stats")
 }
 

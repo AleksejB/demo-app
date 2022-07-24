@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/ui-auth" />
             <option value="$PROJECT_DIR$/ui-counter" />
+            <option value="$PROJECT_DIR$/ui-stats" />
           </set>
         </option>
       </GradleProjectSettings>

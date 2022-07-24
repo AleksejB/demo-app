@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.demoappv1.ui.Graph
-import com.example.ui_counter.counter.CounterScreen
+import com.example.ui.counter.CounterScreen
 
 @ExperimentalComposeUiApi
 fun NavGraphBuilder.addCounterScreen(
@@ -15,16 +15,16 @@ fun NavGraphBuilder.addCounterScreen(
     graph: Graph
 ) {
     composable(
-        route = "dashboard/counter/{userId}",
+        route = "dashboard/counter/{email}",
         arguments = listOf(
-            navArgument("userId") {
+            navArgument("email") {
                 type = NavType.StringType
             }
         )
     ) {
         CounterScreen(
-            navigateToStatsScreen = { userId ->
-                navController.navigate("dashboard/counter/stats/{$userId}")
+            navigateToStatsScreen = { email ->
+                navController.navigate("dashboard/counter/stats/$email")
             }
         )
     }

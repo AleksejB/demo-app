@@ -4,9 +4,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.domain.CurrentUser
 import com.example.demoappv1.ui.Graph
-import com.example.ui_auth.AuthScreen
+import com.example.ui.auth.AuthScreen
 
 @ExperimentalComposeUiApi
 fun NavGraphBuilder.addAuthScreen(
@@ -18,8 +17,8 @@ fun NavGraphBuilder.addAuthScreen(
     ) {
 
         AuthScreen(
-            navigateToDashboard = { userId ->
-                navController.navigate("dashboard/counter/$userId")
+            navigateToDashboard = { userEmail ->
+                navController.navigate("dashboard/counter/$userEmail")
             }
         )
     }

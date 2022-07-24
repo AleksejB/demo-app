@@ -5,14 +5,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.ui_counter.stats.StatsScreen
+import com.example.ui.stats.StatsScreen
 
 @ExperimentalComposeUiApi
 fun NavGraphBuilder.addStatsScreen() {
     composable(
-    "dashboard/counter/stats/{userId}",
+    "dashboard/counter/stats/{email}",
         arguments = listOf(
-            navArgument("userId") {
+            navArgument("email") {
                 type = NavType.StringType
             }
         )

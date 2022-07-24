@@ -10,7 +10,6 @@ object CurrentUser {
     }
 
     data class CurrentUser(
-        val userUuid: String,
         val firstName: String,
         val lastName: String,
         val count: Int
