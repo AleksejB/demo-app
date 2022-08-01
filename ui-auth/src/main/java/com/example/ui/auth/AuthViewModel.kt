@@ -3,6 +3,7 @@ package com.example.ui.auth
 import androidx.lifecycle.viewModelScope
 import com.example.domain.repository.UserRepository
 import com.example.base_ui.viewmodel.MVIViewModel
+import com.example.domain.CurrentUser
 import com.example.domain.repository.CounterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,22 +35,34 @@ class AuthViewModel @Inject constructor(
             }
             is AuthEvent.NextPressed -> {
                 viewModelScope.launch {
-                    userRepository.doesUserExist(state.value.email).fold(
-                        onSuccess = {
+                    when (userRepository.doesUserExist(state.value.email)) {
+                        true -> {
                             postEffect(AuthEffect.NavigateToDashboard(email = state.value.email))
-                        },
-                        onFailure = {
-                            userRepository.insertUser(
-                                email = state.value.email,
-                                firstName = state.value.firstName
+                            CurrentUser.setCurrentUser(
+                                CurrentUser.CurrentUser(
+                                    email = state.value.email,
+                                    firstName = state.value.firstName
+                                )
                             )
-                            counterRepository.insertNewCount(
-                                email = state.value.email,
-                                count = 0
-                            )
+                        }
+                        false -> {
+                            with(state.value) {
+                                userRepository.insertUser(
+                                    email = email,
+                                    firstName = firstName
+                                )
+                                counterRepository.insertNewCount(
+                                    email = email,
+                                    count = 0
+                                )
+                                CurrentUser.setCurrentUser(CurrentUser.CurrentUser(
+                                    email = email,
+                                    firstName = firstName
+                                ))
+                            }
                             postEffect(AuthEffect.NavigateToDashboard(email = state.value.email))
                         }
-                    )
+                    }
                 }
             }
         }

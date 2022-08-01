@@ -2,7 +2,7 @@ package com.example.domain
 
 object CurrentUser {
 
-    lateinit var currentUser: CurrentUser
+    var currentUser: CurrentUser = CurrentUser.Empty
     private set
 
     fun setCurrentUser(newCurrentUser: CurrentUser) {
@@ -10,8 +10,14 @@ object CurrentUser {
     }
 
     data class CurrentUser(
-        val firstName: String,
-        val lastName: String,
-        val count: Int
-    )
+        val email: String,
+        val firstName: String
+    ) {
+        companion object {
+            val Empty = CurrentUser(
+                email = "",
+                firstName = ""
+            )
+        }
+    }
 }

@@ -23,7 +23,9 @@ class CounterViewModel @Inject constructor(
     fun onStart() {
         viewModelScope.launch {
             counterRepository.getCount(email = userEmail).collect { count ->
-                updateCountInState(count)
+                count?.let {
+                    updateCountInState(it)
+                }
             }
         }
     }
@@ -41,6 +43,12 @@ class CounterViewModel @Inject constructor(
             }
             is CounterEvent.DecrementPressed -> {
                 decrementCountInDB()
+            }
+            is CounterEvent.SeeNotesClicked -> {
+                postEffect(CounterEffect.NavigateToSeeNotes)
+            }
+            is CounterEvent.WriteNoteClicked -> {
+                postEffect(CounterEffect.NavigateToWriteNote)
             }
         }
     }

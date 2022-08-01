@@ -4,5 +4,5 @@ import com.example.domain.model.UserCounter
 import kotlinx.coroutines.flow.Flow
 
 interface UserCounterRepository {
-    suspend fun getUserNameANdCount(email: String): UserCounter
+    suspend fun getUserNameAndCount(email: String): UserCounter?
 }

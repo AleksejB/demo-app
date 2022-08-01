@@ -1,13 +1,13 @@
 package com.example.data.repository
 
-import android.util.Log
+import com.example.data.daos.CounterLocalDataSource
+import com.example.data.dto.CounterDto
 import com.example.domain.repository.CounterRepository
-import com.example.domain.datasource.CounterDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CounterRepositoryImpl @Inject constructor(
-    private val counterDataSource: CounterDataSource
+    private val counterLocalDataSource: CounterLocalDataSource
 ): CounterRepository {
 
     companion object {
@@ -15,14 +15,24 @@ class CounterRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertNewCount(email: String, count: Int) {
-        return counterDataSource.insertNewCount(email, count)
+        return counterLocalDataSource.insertNewCount(
+            CounterDto(
+                email = email,
+                count = count
+            )
+        )
     }
 
-    override suspend fun getCount(email: String): Flow<Int> {
-        return counterDataSource.getCount(email)
+    override suspend fun getCount(email: String): Flow<Int?> {
+        return counterLocalDataSource.getUserCount(email)
     }
 
     override suspend fun updateCount(email: String, newCount: Int) {
-        return counterDataSource.updateCount(email, newCount)
+        return counterLocalDataSource.updateCount(
+            CounterDto(
+                email = email,
+                count = newCount
+            )
+        )
     }
 }

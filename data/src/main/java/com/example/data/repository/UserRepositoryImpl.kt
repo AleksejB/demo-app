@@ -1,33 +1,31 @@
 package com.example.data.repository
 
-import android.util.Log
-import com.example.domain.repository.UserRepository
-import com.example.domain.datasource.UserDataSource
+import com.example.data.daos.UserLocalDataSource
+import com.example.data.dto.UserDto
+import com.example.domain.mapping.Mapper
 import com.example.domain.model.User
+import com.example.domain.repository.UserRepository
 import javax.inject.Inject
-import kotlin.Exception
 
 internal class UserRepositoryImpl @Inject constructor(
-    private val userDataSource: UserDataSource
+    private val userLocalDataSource: UserLocalDataSource,
+    private val userMapper: Mapper<UserDto, User>
 ): UserRepository {
 
     companion object {
         private const val TAG = "UserRepositoryImpl"
     }
 
-    override suspend fun doesUserExist(email: String): Result<Unit> {
-        val response = userDataSource.getUserByEmail(email)
-        return response.fold(
-            onSuccess = {
-                Result.success(Unit)
-            },
-            onFailure = {
-                Result.failure(it)
-            }
-        )
+    override suspend fun doesUserExist(email: String): Boolean {
+        return userLocalDataSource.getUser(email) != null
     }
 
     override suspend fun insertUser(email: String, firstName: String) {
-        return userDataSource.insertNewUser(email, firstName)
+        return userLocalDataSource.insertNewUser(
+            UserDto(
+                email = email,
+                firstName = firstName
+            )
+        )
     }
 }

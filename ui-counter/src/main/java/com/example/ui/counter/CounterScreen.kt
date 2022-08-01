@@ -1,10 +1,8 @@
 package com.example.ui.counter
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -20,7 +18,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun CounterScreen(
-    navigateToStatsScreen: (email: String) -> Unit
+    navigateToStatsScreen: (email: String) -> Unit,
+    navigateToWriteNoteScreen: () -> Unit,
+    navigateToSeeNotesScreen: () -> Unit
 ) {
 
     val viewModel = hiltViewModel<CounterViewModel>()
@@ -31,6 +31,12 @@ fun CounterScreen(
             when (effect) {
                 is CounterEffect.NavigateToStats -> {
                     navigateToStatsScreen(effect.email)
+                }
+                is CounterEffect.NavigateToSeeNotes -> {
+                    navigateToSeeNotesScreen()
+                }
+                is CounterEffect.NavigateToWriteNote -> {
+                    navigateToWriteNoteScreen()
                 }
             }
         }
@@ -76,6 +82,20 @@ private fun CounterScreen(
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = "Minus one to the counter"
             )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(onClick = { eventHandler(CounterEvent.SeeNotesClicked) }) {
+                Text(text = "See notes")
+            }
+
+            Button(onClick = { eventHandler(CounterEvent.WriteNoteClicked) }) {
+                Text(text = "Write new note")
+            }
         }
     }
 }

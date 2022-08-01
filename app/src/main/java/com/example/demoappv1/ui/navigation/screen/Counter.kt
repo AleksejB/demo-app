@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.demoappv1.ui.Graph
+import com.example.demoappv1.ui.Screen
 import com.example.ui.counter.CounterScreen
 
 @ExperimentalComposeUiApi
@@ -25,6 +26,12 @@ fun NavGraphBuilder.addCounterScreen(
         CounterScreen(
             navigateToStatsScreen = { email ->
                 navController.navigate("dashboard/counter/stats/$email")
+            },
+            navigateToSeeNotesScreen = {
+                navController.navigate(Screen.SeeNotes.createRoute(Graph.Dashboard))
+            },
+            navigateToWriteNoteScreen = {
+                navController.navigate(Screen.WriteNotes.createRoute(Graph.Dashboard))
             }
         )
     }

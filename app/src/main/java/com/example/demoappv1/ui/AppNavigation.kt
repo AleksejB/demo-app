@@ -20,6 +20,9 @@ sealed class Screen(val route: String) {
     object Auth: Screen("auth")
     object Counter: Screen("counter/{email}")
     object Stats: Screen("stats")
+    object WriteNotes: Screen("write_notes")
+    object SeeNotes: Screen("see_notes")
+    object UserNoteInfo: Screen("user_note_info/{email}")
 }
 
 

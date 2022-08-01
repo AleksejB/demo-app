@@ -3,18 +3,20 @@ package com.example.data.di
 import android.content.Context
 import androidx.room.Room
 import com.example.data.DemoAppDatabase
-import com.example.data.daos.CounterDao
-import com.example.data.daos.UserCounterDao
-import com.example.data.daos.UserDao
-import com.example.domain.datasource.CounterDataSource
-import com.example.domain.datasource.UserDataSource
-import com.example.domain.repository.CounterRepository
-import com.example.data.repository.CounterRepositoryImpl
-import com.example.data.repository.UserCounterRepositoryImpl
-import com.example.domain.repository.UserRepository
+import com.example.data.daos.*
+import com.example.data.dto.UserCounterDto
+import com.example.data.dto.UserDto
+import com.example.data.dto.UserNoteDto
+import com.example.data.dto.UserNoteInfoDto
+import com.example.data.mapping.UserNoteInfoMapper
+import com.example.data.repository.*
 import com.example.data.repository.UserRepositoryImpl
-import com.example.domain.datasource.UserCounterDataSource
-import com.example.domain.repository.UserCounterRepository
+import com.example.domain.mapping.Mapper
+import com.example.domain.model.User
+import com.example.domain.model.UserCounter
+import com.example.domain.model.UserNote
+import com.example.domain.model.UserNoteInfo
+import com.example.domain.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,37 +30,88 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(userDataSource: UserDataSource): UserRepository {
-        return UserRepositoryImpl(userDataSource)
+    fun provideUserNoteInfoRepository(
+        userNoteInfoLocalDataSource: UserNoteInfoLocalDataSource,
+        userNoteInfoMapper: Mapper<UserNoteInfoDto, UserNoteInfo>
+    ): UserNoteInfoRepository {
+        return UserNoteInfoRepositoryImpl(
+            userNoteInfoLocalDataSource,
+            userNoteInfoMapper
+        )
     }
 
     @Provides
     @Singleton
-    fun provideCounterRepository(counterDataSource: CounterDataSource): CounterRepository {
-        return CounterRepositoryImpl(counterDataSource)
+    fun provideUserNoteRepository(
+        userNoteLocalDataSource: UserNoteLocalDataSource,
+        userNoteMapper: Mapper<UserNoteDto, UserNote>
+    ): UserNoteRepository {
+        return UserNoteRepositoryImpl(userNoteLocalDataSource, userNoteMapper)
     }
 
     @Provides
     @Singleton
-    fun provideUserCounterRepository(userCounterDataSource: UserCounterDataSource): UserCounterRepository {
-        return UserCounterRepositoryImpl(userCounterDataSource)
+    fun provideNoteRepository(noteLocalDataSource: NoteLocalDataSource): NoteRepository {
+        return NoteRepositoryImpl(noteLocalDataSource)
     }
 
     @Provides
     @Singleton
-    fun provideUserCounterDao(demoAppDatabase: DemoAppDatabase): UserCounterDao {
+    fun provideUserRepository(
+        userLocalDataSource: UserLocalDataSource,
+        userMapper: Mapper<UserDto, User>
+    ): UserRepository {
+        return UserRepositoryImpl(userLocalDataSource, userMapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCounterRepository(counterLocalDataSource: CounterLocalDataSource): CounterRepository {
+        return CounterRepositoryImpl(counterLocalDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserCounterRepository(
+        userCounterLocalDataSource: UserCounterLocalDataSource,
+        userCounterMapper: Mapper<UserCounterDto, UserCounter>
+    ): UserCounterRepository {
+        return UserCounterRepositoryImpl(userCounterLocalDataSource, userCounterMapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserNoteInfoDao(demoAppDatabase: DemoAppDatabase): UserNoteInfoLocalDataSource {
+        return demoAppDatabase.getUserNoteInfoDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserNoteDao(demoAppDatabase: DemoAppDatabase): UserNoteLocalDataSource {
+        return demoAppDatabase.getUserNoteDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteDao(demoAppDatabase: DemoAppDatabase): NoteLocalDataSource {
+        return demoAppDatabase.getNoteDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserCounterDao(demoAppDatabase: DemoAppDatabase): UserCounterLocalDataSource {
         return demoAppDatabase.getUserCounterDao()
     }
 
     @Provides
     @Singleton
-    fun provideUserDao(demoAppDatabase: DemoAppDatabase): UserDao {
+    fun provideUserDao(demoAppDatabase: DemoAppDatabase): UserLocalDataSource {
         return demoAppDatabase.getUserDao()
     }
 
     @Provides
     @Singleton
-    fun provideCounterDao(demoAppDatabase: DemoAppDatabase): CounterDao {
+    fun provideCounterDao(demoAppDatabase: DemoAppDatabase): CounterLocalDataSource {
         return demoAppDatabase.getCounterDao()
     }
 
@@ -69,6 +122,8 @@ object DataModule {
             context,
             DemoAppDatabase::class.java,
             "demoApp.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }
